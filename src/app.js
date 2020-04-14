@@ -31,7 +31,7 @@ app.get('/about', (req, res) => {
     if (req.query.name)
         res.send({
             name: req.query.name,
-            age: req.query.name.length * 5
+            age: parseInt(req.query.name.charCodeAt(0) * 5 / 10)
         })
     else
         res.send('No')

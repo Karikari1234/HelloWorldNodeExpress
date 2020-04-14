@@ -5,7 +5,7 @@
 
 const form = document.getElementById('form')
 const namepara = document.getElementById('m1')
-
+namepara.textContent = ''
 
 
 if (form) form.addEventListener('submit', (e) => {
@@ -19,5 +19,5 @@ if (form) form.addEventListener('submit', (e) => {
             namepara.textContent = `Your name is ${data.name} and your age is ${data.age}`
         })
     })
-    else console.log('No input given')
+    else namepara.textContent = 'No input given'
 })
