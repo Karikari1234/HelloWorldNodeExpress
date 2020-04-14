@@ -14,7 +14,7 @@ if (form) form.addEventListener('submit', (e) => {
     const input = document.getElementById('input')
     const query = input.value
 
-    if (query) fetch('http://localhost:3000/about?name=' + query).then((response) => {
+    if (query) fetch('/about?name=' + query).then((response) => {
         response.json().then((data) => {
             namepara.textContent = `Your name is ${data.name} and your age is ${data.age}`
         })
