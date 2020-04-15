@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const request = require('request')
 var ip = require('ipaddr.js')
+var requestIp = require('request-ip')
 
 function cleanupAddress(str) {
     // if it's a valid ipv6 address, and if its a mapped ipv4 address,
@@ -17,6 +18,9 @@ function cleanupAddress(str) {
 
 
 const app = express()
+app.use(requestIp.mw({
+    attributeName: 'myCustomAttributeName'
+}))
 // console.log(__filename)
 const publicDirectoryPath = path.join(__dirname, '../public')
 // console.log(publicDirectoryPath)
@@ -41,7 +45,10 @@ var geolocationurl = 'https://api.snoopi.io/'
 app.set('view engine', 'hbs')
 
 app.get('', (req, res) => {
-    geolocationurl = geolocationurl + cleanupAddress(req.headers['x-forwarded-for'])
+    var ip = req.myCustomAttributeName;
+    console.log(ip);
+    //console.log(cleanupAddress(req.headers['x-forwarded-for']))
+    geolocationurl = geolocationurl + cleanupAddress(ip)
     res.render('index', {
         title: "Hello World",
         name: "Naafiz Rahman"
