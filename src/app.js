@@ -1,12 +1,14 @@
 const express = require('express')
 const path = require('path')
-
+const request = require('request')
 
 const app = express()
 // console.log(__filename)
 const publicDirectoryPath = path.join(__dirname, '../public')
 // console.log(publicDirectoryPath)
 const port = process.env.PORT || 3000
+
+const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoibmFhZml6NDciLCJhIjoiY2s5MHkwb2tjMDZ4czNxdGozbHV4dmFwbyJ9.64AtTt7EFUh1IAaUw_A4GQ'
 
 app.set('view engine', 'hbs')
 
@@ -37,7 +39,20 @@ app.get('/about', (req, res) => {
         res.send('No')
 })
 
-app.get('/help', (req, res) => res.send('Help'))
+app.get('/location', (req, res) => {
+    request({
+        url: url,
+        json: true
+    }, (error, response) => {
+        if (response.body.features) res.send({
+            message: response.body.features[0].place_name
+        })
+        else res.send({
+            message: '!'
+        })
+    })
+
+})
 
 app.get('/weather', (req, res) => res.send('Weather'))
 
