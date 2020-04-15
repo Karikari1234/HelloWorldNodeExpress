@@ -1,12 +1,13 @@
-//console.log('Client side javascript on')
-
-
-
-
 const form = document.getElementById('form')
 const namepara = document.getElementById('m1')
 namepara.textContent = ''
 
+const loc = document.getElementById('loc')
+fetch('/location').then((response) => {
+    response.json().then((data) => {
+        if (data.message != '!') loc.textContent = `Your location is ${data.message}`
+    })
+})
 
 if (form) form.addEventListener('submit', (e) => {
     e.preventDefault()
