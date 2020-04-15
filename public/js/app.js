@@ -3,9 +3,11 @@ const namepara = document.getElementById('m1')
 namepara.textContent = ''
 
 const loc = document.getElementById('loc')
-fetch('/location').then((response) => {
+
+fetch('/weather').then((response) => {
     response.json().then((data) => {
-        if (data.message != '!') loc.textContent = `Your location is ${data.message}`
+        if (data) loc.textContent = `Your location is ${data.city},${data.state},${data.country}`
+        else loc.textContent = 'We can\'t find your location'
     })
 })
 
