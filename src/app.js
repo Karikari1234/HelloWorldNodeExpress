@@ -92,7 +92,7 @@ app.get('/weather', (req, res) => {
             json: true
         }, (error, response) => {
             //console.log(response)
-            if (response.body) {
+            if (response.body.CountryName) {
                 res.send({
                     state: response.body.State,
                     city: response.body.City,
