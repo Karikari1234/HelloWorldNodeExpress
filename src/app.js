@@ -99,7 +99,7 @@ app.get('/weather', (req, res) => {
                     country: response.body.CountryName
                 })
             } else res.send({
-                ip: 'not found'
+                ip: geolocationurl
             })
         })
 })

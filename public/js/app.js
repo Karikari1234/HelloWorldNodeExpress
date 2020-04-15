@@ -7,7 +7,7 @@ const loc = document.getElementById('loc')
 fetch('/weather').then((response) => {
     response.json().then((data) => {
         if (!data.ip) loc.textContent = `Heroku Server location is ${data.city},${data.state},${data.country}`
-        else loc.textContent = 'We can\'t find your location'
+        else loc.textContent = 'We can\'t find your location ' + data.ip
     })
 })
 
