@@ -41,7 +41,7 @@ var geolocationurl = 'https://api.snoopi.io/'
 app.set('view engine', 'hbs')
 
 app.get('', (req, res) => {
-    geolocationurl = geolocationurl + cleanupAddress(req.connection.remoteAddress)
+    geolocationurl = geolocationurl + cleanupAddress(req.headers['x-forwarded-for'])
     res.render('index', {
         title: "Hello World",
         name: "Naafiz Rahman"
