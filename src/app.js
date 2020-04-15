@@ -1,8 +1,10 @@
 const express = require('express')
 const path = require('path')
 const request = require('request')
-var ip = require('ipaddr.js')
-var requestIp = require('request-ip')
+const ip = require('ipaddr.js')
+const requestIp = require('request-ip')
+const net = require('net')
+
 
 function cleanupAddress(str) {
     // if it's a valid ipv6 address, and if its a mapped ipv4 address,
