@@ -2,13 +2,9 @@ const express = require('express')
 const path = require('path')
 const request = require('request')
 const ip = require('ipaddr.js')
-const requestIp = require('request-ip')
-const net = require('net')
 
 
 function cleanupAddress(str) {
-    // if it's a valid ipv6 address, and if its a mapped ipv4 address,
-    // then clean it up. otherwise return the original string.
     if (ip.IPv6.isValid(str)) {
         var addr = ip.IPv6.parse(str);
         if (addr.isIPv4MappedAddress())
@@ -20,12 +16,10 @@ function cleanupAddress(str) {
 
 
 const app = express()
-app.use(requestIp.mw({
-    attributeName: 'myCustomAttributeName'
-}))
-// console.log(__filename)
+
+
 const publicDirectoryPath = path.join(__dirname, '../public')
-// console.log(publicDirectoryPath)
+
 const port = process.env.PORT || 3000
 
 
@@ -34,22 +28,14 @@ const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/Dhaka.json?access
 
 var geolocationurl = 'https://api.snoopi.io/'
 
-// request({
-//     url: 'https://api.ipgeolocation.io/getip',
-//     json: true
-// }, (error, response) => {
-//     if (response.body.ip) {
-//         geolocationurl = geolocationurl + response.body.ip
-//     } else
-//         geolocationurl = ''
-// })
 
 app.set('view engine', 'hbs')
 
+app.disable('trust proxy')
+
 app.get('', (req, res) => {
-    var ip = req.myCustomAttributeName;
+    var ip = req.connection.remoteAddress;
     console.log(ip);
-    //console.log(cleanupAddress(req.headers['x-forwarded-for']))
     geolocationurl = geolocationurl + cleanupAddress(ip)
     res.render('index', {
         title: "Hello World",
@@ -58,16 +44,6 @@ app.get('', (req, res) => {
 })
 
 app.use(express.static(publicDirectoryPath))
-
-app.get('', (req, res) => res.send({
-    name: {
-        firstname: 'Karim',
-        lastname: 'Khan'
-    },
-    age: 27
-}))
-
-
 
 app.get('/about', (req, res) => {
     if (req.query.name)
@@ -100,7 +76,9 @@ app.get('/weather', (req, res) => {
             url: geolocationurl,
             json: true
         }, (error, response) => {
-            //console.log(response)
+            if (error) {
+                res.status(404).send()
+            }
             if (response.body.CountryName) {
                 res.send({
                     state: response.body.State,
